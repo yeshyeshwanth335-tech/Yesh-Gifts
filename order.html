@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Yesh Gifts - Order</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* Glass Card */
+.container{
+    max-width:500px;
+    margin:40px auto;
+    padding:25px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    box-shadow:0 8px 32px rgba(0,0,0,0.3);
+    color:white;
+}
+
+/* Title */
+h2{
+    text-align:center;
+    margin-bottom:10px;
+}
+
+/* Inputs */
+input, select{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:12px;
+    border:none;
+    outline:none;
+}
+
+/* Buttons */
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    margin-top:10px;
+    font-size:15px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+.phonepe{ background:#2D3E8B; color:white; }
+.gpay{ background:#4285F4; color:white; }
+.whatsapp{ background:#25D366; color:white; }
+
+/* Product images */
+.products{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    margin:15px 0;
+}
+
+.products img{
+    width:100px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.products img:hover{
+    transform:scale(1.1);
+}
+
+/* Preview */
+.preview{
+    text-align:center;
+    margin-top:10px;
+}
+
+.preview img{
+    width:160px;
+    border-radius:15px;
+    margin-top:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Yesh Gifts 🎁</h2>
+<p style="text-align:center;">Welcome, <span id="userNumber"></span></p>
+
+<h3>Select Product</h3>
+
+<div class="products">
+    <img src="mug1.png" onclick="selectProduct('Good Morning Mug - ₹299',299)">
+    <img src="mug2.png" onclick="selectProduct('Couple Mug - ₹349',349)">
+</div>
+
+<input type="text" id="productName" placeholder="Selected Product" readonly>
+
+<input type="text" placeholder="Enter Delivery Address">
+
+<h3>Upload Your Image</h3>
+<input type="file" onchange="previewImage(event)">
+
+<div class="preview">
+<img id="imgPreview">
+</div>
+
+<a id="phonepeLink">
+<button class="phonepe">Pay with PhonePe</button>
+</a>
+
+<a id="gpayLink">
+<button class="gpay">Pay with Google Pay</button>
+</a>
+
+<button class="whatsapp" onclick="sendOrder()">Send Order on WhatsApp</button>
+
+<p style="text-align:center;font-size:13px;">
+After payment send screenshot on WhatsApp.
+</p>
+
+</div>
+
+<script>
+
+document.getElementById("userNumber").innerText =
+localStorage.getItem("customerNumber");
+
+var price = 299;
+
+function selectProduct(name, amount){
+    document.getElementById("productName").value = name;
+    price = amount;
+
+    document.getElementById("phonepeLink").href =
+    "upi://pay?pa=7760932963@ybl&pn=Yesh%20Gifts&am="+price+"&cu=INR";
+
+    document.getElementById("gpayLink").href =
+    "upi://pay?pa=7760932963@okaxis&pn=Yesh%20Gifts&am="+price+"&cu=INR";
+}
+
+function previewImage(event){
+    var reader = new FileReader();
+    reader.onload = function(){
+        document.getElementById("imgPreview").src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+}
+
+function sendOrder(){
+    var number = localStorage.getItem("customerNumber");
+    var product = document.getElementById("productName").value;
+    var url = "https://wa.me/917760932963?text=New%20Order%0AMobile:%20"
+              + number + "%0AProduct:%20" + product;
+    window.open(url, "_blank");
+}
+
+</script>
+
+</body>
+</html>
